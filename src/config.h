@@ -1,2 +1,2 @@
-#define INPUT_DATA_DIR "/workspaces/dcc012-lab01-arquivos/tests/data/"
+#define INPUT_DATA_DIR "/home/pedro/dev/ed2/dcc012-arquivos-Pedro-Grimaldi-Hansel/tests/data/"
 
