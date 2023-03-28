@@ -178,18 +178,45 @@ Estudante Siga::ObterEstudante(int idx)
         
 void Siga::SalvaCSV(string arquivo_csv)
 {
+
     string arquivo_csv_path = INPUT_DATA_DIR+arquivo_csv;
-    // TODO: implementar salvamento de arquivo CSV
-    // Passos:
-    // Abrir arquivo CSV
-    // Escrever cabeçalho
-    // Posicione o cursor para o inicio do arquivo binário
-    // Para cada linha de dados
-    //    Ler um estudante do arquivo binário
-    //    Escrever o objeto estudante no arquivo CSV
-    // Fim-Para
-    // Fechar arquivo CSV
-   
+    ifstream csv_file;
+    csv_file.open(arquivo_csv_path);
+
+    if(!csv_file.is_open())
+    {
+        cout << "Erro ao abrir arquivo CSV" << endl;
+        return;
+    }
+
+    string line;
+    getline(csv_file, line);
+
+    while(getline(csv_file, line))
+    {
+
+        Estudante est;
+        stringstream ss(line);
+        string token;
+        getline(ss, token, ',');
+        est.TrocarNome(token.c_str());
+        getline(ss, token, ',');
+        est.TrocarMatricula(stoi(token));
+        getline(ss, token, ',');
+        est.TrocarAnoIngresso(stoi(token));
+        getline(ss, token, '\n');
+        est.TrocarIRA(stof(token));
+
+
+        this->EscrevaEstudante(this->n_estudantes, est);
+
+
+        this->n_estudantes++;
+    }
+
+    csv_file.close();
+
+    cout << this->n_estudantes << " registros de estudantes" << endl;
 }
         
         
