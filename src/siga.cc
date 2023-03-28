@@ -197,9 +197,16 @@ void Siga::AlteraCadastroEstudante(int idx, Estudante est)
 {
     // TODO: implementar alteração de cadastro de estudante
     // Passos:
+
     // Posicione o cursor para o inicio do arquivo
+    this->file_stream.seekg(0, this->file_stream.beg);
+
     // Posicione o cursor para a posição idx
+    this->file_stream.seekg(idx * sizeof(Estudante), this->file_stream.beg);
+
     // Escreva o estudante na posição idx
+    this->file_stream.write((char *)&est, sizeof(Estudante));  
+    
     // Saia da função
 }
         
