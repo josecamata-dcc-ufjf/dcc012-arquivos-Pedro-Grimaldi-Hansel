@@ -113,6 +113,19 @@ int  Siga::PesquisaPorMatricula(int matricula)
     // Fim-Para
     // Coloque o cursor para o final do arquivo
     // retorne -1
+
+    this->file_stream.seekg(0, this->file_stream.beg);
+    for(int i = 0; i < this->ObterNumeroEstudantes(); i++)
+    {
+        Estudante est;
+        this->file_stream.read((char*)&est, sizeof(Estudante));
+        if(est.ObterMatricula() == matricula)
+        {   
+            this->file_stream.seekp(this->n_estudantes * sizeof(Estudante), this->file_stream.beg);
+            return i;
+        }
+    }
+    this->file_stream.seekp(this->n_estudantes * sizeof(Estudante), this->file_stream.beg);
     return -1;
 }
         
@@ -124,6 +137,15 @@ void Siga::AdicionaEstudante(Estudante est)
     // Se já cadastrado, retorne sem fazer nada   
     // Caso Contrário, adicione o estudante no final do arquivobinário
     // e incremente o numero de estudantes
+
+    int matricula = est.ObterMatricula();
+
+    if( PesquisaPorMatricula(matricula) == -1  )// caso n encontre a matricula
+    {
+        //add estudante
+        EscrevaEstudante(n_estudantes, est);
+        n_estudantes = n_estudantes +1;
+    }
     
 }
   
