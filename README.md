@@ -55,7 +55,7 @@ Para a compilação em ambiente Unix/linux, use o comando:
   - Compile os testes:
   
   ```
-    make ../.
+    make
   ```
   
   - Rode os testes:

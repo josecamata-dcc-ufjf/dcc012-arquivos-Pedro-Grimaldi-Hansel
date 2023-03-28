@@ -82,11 +82,11 @@ void Siga::LerCSV(string arquivo_csv)
         getline(ss, token, ',');
         est.TrocarNome(token.c_str());
         getline(ss, token, ',');
-        est.TrocarMatricula(stoi(token));
+        est.TrocarMatricula(stoi(token)); //stoi string to integer
         getline(ss, token, ',');
         est.TrocarAnoIngresso(stoi(token));
         getline(ss, token, '\n');
-        est.TrocarIRA(stof(token));
+        est.TrocarIRA(stof(token));  //stof string to float
 
         // Escrever o objeto estudante no arquivo binário
         this->EscrevaEstudante(this->n_estudantes, est);
@@ -105,57 +105,73 @@ void Siga::LerCSV(string arquivo_csv)
 int  Siga::PesquisaPorMatricula(int matricula)
 {
     // TODO: implementar pesquisa por matrícula
+    
     // Posicione o cursor para o inicio do arquivo:
-    // Para i = 0 até n_estudante
-    //    Ler estudante na posição corrente no arquivo
-    //    Testar se é a matricula procurada, se afirmativo
-    //    retorne a posiçao i.
-    // Fim-Para
-    // Coloque o cursor para o final do arquivo
-    // retorne -1
-
     this->file_stream.seekg(0, this->file_stream.beg);
+    
+    // Para i = 0 até n_estudante
     for(int i = 0; i < this->ObterNumeroEstudantes(); i++)
     {
         Estudante est;
+
+        //Ler estudante na posição corrente no arquivo
         this->file_stream.read((char*)&est, sizeof(Estudante));
+        
+        //Testar se é a matricula procurada, se afirmativo
         if(est.ObterMatricula() == matricula)
         {   
-            this->file_stream.seekp(this->n_estudantes * sizeof(Estudante), this->file_stream.beg);
-            return i;
+            // Coloque o cursor para o final do arquivo  ???
+            this->file_stream.seekp(this->n_estudantes * sizeof(Estudante), this->file_stream.end);
+            return i;   //retorne a posiçao i.
         }
     }
-    this->file_stream.seekp(this->n_estudantes * sizeof(Estudante), this->file_stream.beg);
+
+    // Coloque o cursor para o final do arquivo  ???
+    this->file_stream.seekp(this->n_estudantes * sizeof(Estudante), this->file_stream.end);
+
+    
+    // retorne -1
     return -1;
 }
         
 void Siga::AdicionaEstudante(Estudante est)
 {
     // TODO: Implementar cadastro de estudante
-    // Passos:
-    // Testar se est já foi cadastrado
-    // Se já cadastrado, retorne sem fazer nada   
-    // Caso Contrário, adicione o estudante no final do arquivobinário
-    // e incremente o numero de estudantes
 
     int matricula = est.ObterMatricula();
 
-    if( PesquisaPorMatricula(matricula) == -1  )// caso n encontre a matricula
-    {
-        //add estudante
+    // Testar se est já foi cadastrado
+    if( PesquisaPorMatricula(matricula) == -1  )    //Caso não exista matricula
+    {   
+        // Se não cadastrado adicione o estudante no final do arquivo binário
         EscrevaEstudante(n_estudantes, est);
+        
+        // e incremente o numero de estudantes
         n_estudantes = n_estudantes +1;
+    }
+    
+    // Se já cadastrado, retorne sem fazer nada  
+    else{   
+        cout<<"Estudante ja cadastrado!"<<endl;  //Caso exista matricula
     }
     
 }
   
 Estudante Siga::ObterEstudante(int idx)
 {
-    Estudante est;
+    
     // TODO: implementar obter estudante
+    Estudante est;
+
     // Posicione o cursor para o inicio do arquivo
+    this->file_stream.seekg(0, this->file_stream.beg);
+
     // Posicione o cursor para a posição idx
+    this->file_stream.seekg(idx, this->file_stream.beg);
+
     // Leia o estudante na posição idx
+    LeiaEstudante(idx, est);
+
     // Retorne o estudante
     return est;
 }
